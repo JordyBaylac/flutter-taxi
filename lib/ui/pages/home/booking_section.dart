@@ -13,54 +13,43 @@ class BookingSection extends StatefulWidget {
 }
 
 class _BookingSectionState extends State<BookingSection> {
-  bool _showSection = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 200), () {
-      setState(() {
-        _showSection = true;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final height = screenHeightOf(context);
     final width = screenWidthOf(context);
-    final boxHeight = height * .65;
+    final boxHeight = screenIsLandscape(context) ? height * .63 : height * .75;
+    final boxWidth = screenIsLandscape(context) ? width * .75 : width;
 
-    return SizedBox(
-      height: boxHeight,
-      child: Stack(
-        fit: StackFit.expand,
-        overflow: Overflow.visible,
-        children: <Widget>[
-          AnimatedPositioned(
-            duration: Duration(seconds: 3),
-            curve: Curves.elasticInOut,
-            top: _showSection ? 0 : height + boxHeight,
-            right: 0,
-            left: 0,
-            child: Container(
-              width: width,
-              height: boxHeight,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50),
-                  topRight: Radius.circular(50),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 20,
-                    offset: Offset(0, -5),
-                    color: Colors.black12,
-                  ),
-                ],
-                color: colorSchemeOf(context).primaryVariant,
-              ),
+    return Stack(
+      fit: StackFit.expand,
+      overflow: Overflow.visible,
+      children: <Widget>[
+        TweenAnimationBuilder(
+          duration: Duration(seconds: 1),
+          curve: Curves.elasticInOut,
+          tween: Tween<double>(begin: 0, end: boxHeight),
+          builder: (context, double boxFraction, child) {
+            return Positioned(
+              top: height - boxFraction.toInt(),
+              width: boxWidth,
+              left: 0,
+              child: child,
+            );
+          },
+          child: Container(
+            height: boxHeight,
+            child: Material(
+              elevation: 5,
+              // borderRadius: BorderRadius.circular(40),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+              color: colorSchemeOf(context).primaryVariant,
               child: Column(
                 children: <Widget>[
                   Padding(
@@ -79,59 +68,18 @@ class _BookingSectionState extends State<BookingSection> {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
-
-    // return TweenAnimationBuilder(
-    //   duration: Duration(seconds: 2),
-    //   tween: Tween<double>(begin: .0, end: .5),
-    //   child: new Container(
-    //     decoration: BoxDecoration(
-    //       borderRadius: BorderRadius.only(
-    //         topLeft: Radius.circular(50),
-    //         topRight: Radius.circular(50),
-    //       ),
-    //       boxShadow: [
-    //         BoxShadow(
-    //           blurRadius: 15,
-    //           offset: Offset(0, 0),
-    //           color: Colors.black26,
-    //         ),
-    //       ],
-    //       color: colorSchemeOf(context).primaryVariant,
-    //     ),
-    //     child: Row(
-    //       children: <Widget>[
-    //         Image.asset(
-    //           "assets/cars/chevy56_2.png",
-    //         ),
-    //         Column(
-    //           children: <Widget>[Text("Chevy 56"), Text("textoo")],
-    //         )
-    //       ],
-    //     ),
-    //   ),
-    //   builder: (context, double screenFraction, child) {
-    //     print("screenFraction: $screenFraction");
-    //     print("calculated position: ${height * (1 - screenFraction)}");
-    //     return Transform.translate(
-    //       child: child,
-    //       offset: Offset(0, height * (1 - screenFraction)),
-    //     );
-    //   },
-    // );
   }
 
   _buildBookingBody() {
     final isLandscape = screenIsLandscape(context);
 
-    // final image = Image.asset(
-    //   "assets/cars/chevy56_2.png",
-    //   fit: BoxFit.cover,
-    // );
-
-    final image = _buildCarsCarousel();
+    final image = Image.asset(
+      "assets/cars/chevy56_2.png",
+      fit: BoxFit.contain,
+    );
 
     final inputs = _buildBookingForm();
 
@@ -152,53 +100,24 @@ class _BookingSectionState extends State<BookingSection> {
     );
   }
 
-  _buildCarsCarousel() {
-    return Stack(
-      children: [
-        CarouselSlider(
-          height: 400.0,
-          autoPlay: true,
-          autoPlayInterval: Duration(seconds: 10),
-          pauseAutoPlayOnTouch: Duration(milliseconds: 100),
-          initialPage: 1,
-          items: cars().map((asset) {
-            return Image.asset(
-              asset,
-              fit: BoxFit.fitWidth,
-            );
-          }).toList(),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Colors.white38.withOpacity(.05),
-                Colors.white70,
-              ],
-              stops: [0.90, 1.0],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   _buildBookingForm() => Form(
         key: _formKey,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: ListView(
+            padding: EdgeInsets.all(10),
+            shrinkWrap: false,
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(labelText: "Name"),
                 validator: Validator(entityName: "Your name").add(RequiredRule()).add(MinLengthRule(4)),
               ),
+              SizedBox(height: 10),
               TextFormField(
                 decoration: InputDecoration(labelText: "Email"),
                 validator: Validator(entityName: "Your email").add(RequiredRule()).add(EmailRule()),
               ),
+              SizedBox(height: 10),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -218,6 +137,7 @@ class _BookingSectionState extends State<BookingSection> {
                   ),
                 ],
               ),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -270,10 +190,10 @@ class _BookingSectionState extends State<BookingSection> {
                 ],
               ),
               SizedBox(
-                height: 30,
+                height: 15,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -311,7 +231,7 @@ class _BookingSectionState extends State<BookingSection> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 50,
               ),
             ],
           ),

@@ -1,67 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sailor/sailor.dart';
 import 'package:zitotaxi/services/theme_service.dart';
+import 'package:zitotaxi/state/navigation_notifier.dart';
 import 'package:zitotaxi/ui/pages/routes.dart';
 
 getTopBar() => PreferredSize(
       preferredSize: Size.fromHeight(50),
-      child: _TopBar(
-        key: ValueKey("topbar"),
-      ),
+      child: _TopBar(),
     );
 
-class _TopBar extends StatefulWidget {
-  _TopBar({Key key}) : super(key: key);
-  @override
-  _TopBarState createState() => _TopBarState();
-}
-
-class _TopBarState extends State<_TopBar> {
-  int selectedMenuItem = 0;
-
-  _selectMenuItem(int index) => setState(() {
-        selectedMenuItem = index;
-      });
-
+class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppBarTheme.of(context).color,
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Spacer(
-            flex: 2,
+    return Consumer<NavigationNotifier>(
+      builder: (context, state, child) {
+        return Container(
+          color: AppBarTheme.of(context).color,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Spacer(
+                flex: 2,
+              ),
+              Expanded(
+                flex: 1,
+                child: _MenuItem(
+                  title: "Home",
+                  isSelected: state.selectedPage == Page.home,
+                  onSelect: () {
+                    if (state.selectedPage != Page.home) {
+                      Routes.sailor.navigate(
+                        "/home",
+                        transitions: [SailorTransition.fade_in],
+                      );
+                    }
+                    state.selectPage(Page.home);
+                  },
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: _MenuItem(
+                  title: "About us",
+                  isSelected: state.selectedPage == Page.about,
+                  onSelect: () {
+                    if (state.selectedPage != Page.about) {
+                      Routes.sailor.navigate(
+                        "/about",
+                        transitions: [SailorTransition.fade_in],
+                      );
+                    }
+                    state.selectPage(Page.about);
+                  },
+                ),
+              ),
+              SizedBox(width: 20),
+            ],
           ),
-          Expanded(
-            flex: 1,
-            child: _MenuItem(
-              title: "Home",
-              isSelected: selectedMenuItem == 0,
-              onSelect: () async {
-                await Routes.sailor.navigate(
-                  "/home",
-                );
-                _selectMenuItem(0);
-              },
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: _MenuItem(
-              title: "About us",
-              isSelected: selectedMenuItem == 1,
-              onSelect: () async {
-                await Routes.sailor.navigate(
-                  "/about",
-                );
-                _selectMenuItem(1);
-              },
-            ),
-          ),
-          SizedBox(width: 20),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -83,7 +82,13 @@ class _MenuItem extends StatelessWidget {
           Spacer(flex: 2),
           Text(title),
           Spacer(flex: 2),
-          _selector(context),
+          Row(
+            children: <Widget>[
+              Spacer(),
+              Expanded(flex: 2, child: _selector(context)),
+              Spacer(),
+            ],
+          ),
         ],
       ),
     );
