@@ -158,13 +158,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-  sailor:
-    dependency: "direct main"
-    description:
-      name: sailor
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.0"
   sky_engine:
     dependency: transitive
     description: flutter

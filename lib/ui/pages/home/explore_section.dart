@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:zitotaxi/models/place.dart';
+import 'package:zitotaxi/services/places_service.dart';
 import 'package:zitotaxi/services/screen_service.dart';
 import 'package:zitotaxi/services/theme_service.dart';
 
 class ExploreSection extends StatelessWidget {
+  _sectionHeight(BuildContext context) =>
+      screenIsLandscape(context) ? screenHeightOf(context) * .37 : screenHeightOf(context) * .30;
+
+  _sectionWidth(BuildContext context) => screenWidthOf(context);
+
+  _cardHeight(BuildContext context) => _sectionHeight(context) * .60;
+
+  _cardWidth(BuildContext context) => _sectionWidth(context) * .25;
+
   @override
   Widget build(BuildContext context) {
-    final height = screenHeightOf(context);
-    final isLandscape = screenIsLandscape(context);
-    final sectionHeight = isLandscape ? height * .37 : height * .25;
-
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: (isLandscape ? 50 : 20), vertical: (isLandscape ? 20 : 10)),
-      height: sectionHeight,
+      padding: EdgeInsets.symmetric(
+        horizontal: (screenIsLandscape(context) ? 50 : 25),
+        vertical: (screenIsLandscape(context) ? 25 : 15),
+      ),
+      height: _sectionHeight(context),
+      width: _sectionWidth(context),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,49 +31,71 @@ class ExploreSection extends StatelessWidget {
             "Explore Cuba with us",
             style: primaryTextThemeOf(context).title,
           ),
-          Row(
-            children: <Widget>[
-              _buildCard(context),
-            ],
-          )
+          FutureBuilder(
+            future: placesGetIconic(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Container();
+              } else if (!snapshot.hasData) {
+                return Center(child: Text("no data"));
+              }
+
+              final places = snapshot.data as List<Place>;
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: _cardHeight(context),
+                ),
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: places.length,
+                  separatorBuilder: (context, idx) {
+                    return SizedBox(width: 20);
+                  },
+                  itemBuilder: (context, idx) {
+                    return _buildCard(context, places[idx]);
+                  },
+                ),
+              );
+            },
+          ),
+          // Row(
+          //   children: <Widget>[
+          //     _buildCard(context),
+          //   ],
+          // )
         ],
       ),
     );
   }
 
-  _buildCard(BuildContext context) {
-    final height = screenHeightOf(context);
-    final width = screenWidthOf(context);
-    final isLandscape = screenIsLandscape(context);
-    final sectionHeight = isLandscape ? height * .37 : height * .25;
-    final cardHeight = sectionHeight * .60;
-    final cardWidth = width * .25;
-
+  _buildCard(BuildContext ctx, Place place) {
     final image = Container(
       child: Image.asset(
-        "assets/cuba/capitolio.jpg",
-        height: isLandscape ? cardHeight : cardHeight * .75,
-        width: isLandscape ? cardWidth * .60 : cardWidth,
+        place.imageUrl,
+        height: screenIsLandscape(ctx) ? _cardHeight(ctx) : _cardHeight(ctx) * .70,
+        width: screenIsLandscape(ctx) ? _cardWidth(ctx) * .60 : _cardWidth(ctx),
         fit: BoxFit.fitHeight,
       ),
     );
 
     final content = Container(
-      width: isLandscape ? cardWidth * .40 : cardWidth,
-      height: isLandscape ? cardHeight : cardHeight * 0.25,
-      padding: EdgeInsets.all(isLandscape ? 10 : 3),
-      color: colorSchemeOf(context).primary.withOpacity(.9),
+      width: screenIsLandscape(ctx) ? _cardWidth(ctx) * .40 : _cardWidth(ctx),
+      padding: EdgeInsets.all(screenIsLandscape(ctx) ? 10 : 0),
+      color: colorSchemeOf(ctx).secondary.withOpacity(.9),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
+          SizedBox(),
           Text(
-            "Capitolio",
-            style: primaryTextThemeOf(context).headline.apply(fontSizeFactor: .75),
+            place.name,
+            style: primaryTextThemeOf(ctx).headline.apply(fontSizeFactor: .75),
           ),
-          SizedBox(height: isLandscape ? 10 : 0),
-          isLandscape
+          SizedBox(height: screenIsLandscape(ctx) ? 10 : 0),
+          screenIsLandscape(ctx)
               ? Text(
-                  "El Capitolio, or the National Capitol Building (Capitolio Nacional de La Habana) is a public edifice and one of the most visited sites in Havana, capital of Cuba. ",
-                  style: primaryTextThemeOf(context).body2,
+                  place.description,
+                  style: primaryTextThemeOf(ctx).body2,
                   maxLines: 6,
                   softWrap: true,
                 )
@@ -78,14 +111,20 @@ class ExploreSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
-        width: cardWidth,
-        height: cardHeight,
-        child: isLandscape
+        width: _cardWidth(ctx),
+        height: _cardHeight(ctx),
+        child: screenIsLandscape(ctx)
             ? Row(
                 children: <Widget>[image, content],
               )
             : Column(
-                children: <Widget>[image, content],
+                children: <Widget>[
+                  Expanded(flex: 2, child: image),
+                  Expanded(
+                    flex: 1,
+                    child: content,
+                  ),
+                ],
               ),
       ),
     );

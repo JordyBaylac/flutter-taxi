@@ -23,8 +23,8 @@ class _BookingSectionState extends State<BookingSection> {
   Widget build(BuildContext context) {
     final height = screenHeightOf(context);
     final width = screenWidthOf(context);
-    final boxHeight = screenIsLandscape(context) ? height * .63 : height * .75;
-    final boxWidth = screenIsLandscape(context) ? width * .75 : width;
+    final boxHeight = screenIsLandscape(context) ? height * .55 : height * .60;
+    final boxWidth = screenIsLandscape(context) ? width * .30 : width;
 
     return Stack(
       fit: StackFit.expand,
@@ -38,28 +38,36 @@ class _BookingSectionState extends State<BookingSection> {
             return Positioned(
               top: height - boxFraction.toInt(),
               width: boxWidth,
-              left: 0,
+              right: 0,
               child: child,
             );
           },
           child: Container(
             height: boxHeight,
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: Material(
-              elevation: 5,
-              // borderRadius: BorderRadius.circular(40),
+              elevation: 1,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
               color: colorSchemeOf(context).primaryVariant,
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Text("Book now!", style: Theme.of(context).primaryTextTheme.title),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, bottom: 10),
-                    child: Text(
-                      "no payment required",
-                      style: Theme.of(context).primaryTextTheme.subtitle.apply(color: Colors.black.withOpacity(.7)),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("Book now!", style: Theme.of(context).primaryTextTheme.title),
+                          Spacer(),
+                          Text(
+                            "no payment required",
+                            style:
+                                Theme.of(context).primaryTextTheme.subtitle.apply(color: Colors.black.withOpacity(.7)),
+                          ),
+                          Spacer(flex: 2),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(flex: 1, child: _buildBookingBody()),
@@ -75,17 +83,11 @@ class _BookingSectionState extends State<BookingSection> {
   _buildBookingBody() {
     final isLandscape = screenIsLandscape(context);
 
-    final image = Image.asset(
-      "assets/cars/chevy56_2.png",
-      fit: BoxFit.contain,
-    );
-
     final inputs = _buildBookingForm();
 
     if (isLandscape) {
       return Row(
         children: <Widget>[
-          Expanded(child: image),
           Expanded(child: inputs),
         ],
       );
@@ -93,8 +95,7 @@ class _BookingSectionState extends State<BookingSection> {
 
     return Column(
       children: <Widget>[
-        Expanded(child: image),
-        Expanded(flex: 4, child: inputs),
+        Expanded(flex: 7, child: inputs),
       ],
     );
   }
@@ -104,44 +105,32 @@ class _BookingSectionState extends State<BookingSection> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: ListView(
-            padding: EdgeInsets.all(10),
-            shrinkWrap: false,
+            padding: EdgeInsets.all(screenIsLandscape(context) ? 10 : 0),
             children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(labelText: "Name"),
-                validator: Validator(entityName: "Your name").add(RequiredRule()).add(MinLengthRule(4)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text("Airport pickup:", style: primaryTextThemeOf(context).display2),
+                  Switch(
+                    onChanged: (v) {
+                      print("v is $v");
+                    },
+                    value: false,
+                  ),
+                ],
               ),
-              SizedBox(height: 10),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Email"),
-                validator: Validator(entityName: "Your email").add(RequiredRule()).add(EmailRule()),
-              ),
-              SizedBox(height: 10),
               Row(
                 children: <Widget>[
                   Expanded(
                     flex: 3,
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: "Origin"),
-                      validator: Validator(entityName: "Point of origin").add(RequiredRule()).add(MinLengthRule(4)),
+                      decoration: InputDecoration(labelText: "Name"),
+                      validator: Validator(entityName: "Your name").add(RequiredRule()).add(MinLengthRule(4)),
                     ),
                   ),
                   Spacer(),
                   Expanded(
-                    flex: 3,
-                    child: TextFormField(
-                      decoration: InputDecoration(labelText: "Destination"),
-                      validator: Validator(entityName: "Desired destination").add(RequiredRule()).add(MinLengthRule(4)),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: DateTimeField(
                       format: DateFormat("yyyy-MM-dd"),
                       decoration: InputDecoration(labelText: "Date"),
@@ -161,9 +150,21 @@ class _BookingSectionState extends State<BookingSection> {
                       },
                     ),
                   ),
-                  Spacer(),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: <Widget>[
                   Expanded(
                     flex: 3,
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: "Email"),
+                      validator: Validator(entityName: "Your email").add(RequiredRule()).add(EmailRule()),
+                    ),
+                  ),
+                  Spacer(),
+                  Expanded(
+                    flex: 2,
                     child: DropdownButtonFormField(
                       items: ['1', '2', '3', '4', "5 to 9", "9 or more"].map((value) {
                         return DropdownMenuItem<String>(
@@ -188,11 +189,31 @@ class _BookingSectionState extends State<BookingSection> {
                   ),
                 ],
               ),
+              SizedBox(height: 10),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: "Origin"),
+                      validator: Validator(entityName: "Point of origin").add(RequiredRule()).add(MinLengthRule(4)),
+                    ),
+                  ),
+                  Spacer(),
+                  Expanded(
+                    flex: 3,
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: "Destination"),
+                      validator: Validator(entityName: "Desired destination").add(RequiredRule()).add(MinLengthRule(4)),
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(
                 height: 15,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                padding: EdgeInsets.symmetric(vertical: (screenIsLandscape(context) ? 10 : 5)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -209,7 +230,7 @@ class _BookingSectionState extends State<BookingSection> {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: (screenIsLandscape(context) ? 15 : 10)),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,7 +251,7 @@ class _BookingSectionState extends State<BookingSection> {
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: 200,
               ),
             ],
           ),

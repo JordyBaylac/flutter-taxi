@@ -6,7 +6,10 @@ class NavigationNotifier extends ChangeNotifier {
   var selectedPage = Page.home;
 
   void selectPage(Page page) {
-    selectedPage = page;
-    notifyListeners();
+    if (selectedPage != page) {
+      print("changed to page $page");
+      selectedPage = page;
+      notifyListeners();
+    }
   }
 }

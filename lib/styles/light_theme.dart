@@ -5,9 +5,10 @@ lightTheme() {
   final onPrimary = Colors.black;
   final primaryVariant = Colors.white;
 
-  final secondary = Colors.teal[400];
+  final secondary = Colors.yellow[200];
   final onSecondary = Colors.black87;
-  final secondaryVariant = Colors.teal[300];
+  final secondaryVariant = Colors.yellow[300];
+  final onSecondaryVariant = Colors.black26;
 
   final primaryTextTheme = TextTheme(
     button: TextStyle(color: onPrimary),
@@ -18,6 +19,17 @@ lightTheme() {
     body2: TextStyle(color: onPrimary, fontSize: 14),
     display1: TextStyle(color: onPrimary, fontSize: 16),
     display2: TextStyle(color: onPrimary, fontSize: 14),
+  );
+
+  final secondaryTextTheme = TextTheme(
+    button: TextStyle(color: onSecondary),
+    title: TextStyle(color: onSecondary, fontSize: 24, fontWeight: FontWeight.bold),
+    subtitle: TextStyle(color: onSecondary, fontSize: 14, fontStyle: FontStyle.italic),
+    headline: TextStyle(color: onSecondary, fontSize: 18, fontWeight: FontWeight.bold),
+    body1: TextStyle(color: onSecondary, fontSize: 16),
+    body2: TextStyle(color: onSecondary, fontSize: 14),
+    display1: TextStyle(color: onSecondary, fontSize: 16),
+    display2: TextStyle(color: onSecondary, fontSize: 14),
   );
 
   return ThemeData(
@@ -36,31 +48,35 @@ lightTheme() {
     // text
     textTheme: primaryTextTheme,
     primaryTextTheme: primaryTextTheme,
-    accentTextTheme: TextTheme(
-      button: TextStyle(color: onSecondary),
-      title: TextStyle(color: onSecondary, fontSize: 24, fontWeight: FontWeight.bold),
-      subtitle: TextStyle(color: onSecondary, fontSize: 14, fontStyle: FontStyle.italic),
-      headline: TextStyle(color: onSecondary, fontSize: 18, fontWeight: FontWeight.bold),
-      body1: TextStyle(color: onSecondary, fontSize: 16),
-      body2: TextStyle(color: onSecondary, fontSize: 14),
-      display1: TextStyle(color: onSecondary, fontSize: 16),
-      display2: TextStyle(color: onSecondary, fontSize: 14),
-    ),
+    accentTextTheme: secondaryTextTheme,
 
     // elements
     appBarTheme: AppBarTheme(
       elevation: 0,
-      color: secondaryVariant,
+      color: Colors.transparent,
+    ),
+
+    tabBarTheme: TabBarTheme(
+      labelColor: onSecondary,
+      labelStyle: secondaryTextTheme.headline,
+      unselectedLabelStyle: secondaryTextTheme.headline,
+      indicator: UnderlineTabIndicator(
+        borderSide: BorderSide(
+          color: onSecondaryVariant,
+          width: 2,
+        ),
+      ),
     ),
 
     inputDecorationTheme: InputDecorationTheme(
-        labelStyle: primaryTextTheme.display1,
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
-            color: secondaryVariant,
-            width: 1,
-          ),
-        )),
+      labelStyle: primaryTextTheme.display2,
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: secondaryVariant,
+          width: 1,
+        ),
+      ),
+    ),
   );
 }
