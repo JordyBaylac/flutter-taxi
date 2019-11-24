@@ -95,13 +95,13 @@ class _MenuItem extends StatelessWidget {
   }
 
   _selector(BuildContext context) {
-    final duration = Duration(milliseconds: 300);
+    final duration = Duration(milliseconds: 400);
     final curve = Curves.easeIn;
 
     return AnimatedPadding(
       duration: duration,
       curve: curve,
-      padding: isSelected ? EdgeInsets.symmetric(horizontal: 10) : EdgeInsets.symmetric(horizontal: 40),
+      padding: isSelected ? EdgeInsets.symmetric(horizontal: 5) : EdgeInsets.symmetric(horizontal: 40),
       child: AnimatedContainer(
         duration: duration,
         curve: curve,

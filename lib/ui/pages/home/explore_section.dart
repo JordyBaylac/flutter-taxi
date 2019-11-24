@@ -6,11 +6,8 @@ class ExploreSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = screenHeightOf(context);
-    final width = screenWidthOf(context);
     final isLandscape = screenIsLandscape(context);
     final sectionHeight = isLandscape ? height * .37 : height * .25;
-    final cardHeight = sectionHeight * .60;
-    final cardWidth = width * .25;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: (isLandscape ? 50 : 20), vertical: (isLandscape ? 20 : 10)),
