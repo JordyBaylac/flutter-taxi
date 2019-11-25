@@ -53,18 +53,16 @@ lightTheme() {
     // elements
     appBarTheme: AppBarTheme(
       elevation: 0,
-      color: Colors.transparent,
+      color: primaryVariant,
     ),
 
     tabBarTheme: TabBarTheme(
       labelColor: onSecondary,
       labelStyle: secondaryTextTheme.headline,
       unselectedLabelStyle: secondaryTextTheme.headline,
-      indicator: UnderlineTabIndicator(
-        borderSide: BorderSide(
-          color: onSecondaryVariant,
-          width: 2,
-        ),
+      indicator: BoxDecoration(
+        color: secondary,
+        borderRadius: BorderRadius.circular(30),
       ),
     ),
 

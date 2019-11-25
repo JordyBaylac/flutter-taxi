@@ -23,18 +23,19 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
+        Align(
+          alignment: screenIsLandscape(context) ? Alignment.bottomRight : Alignment.bottomCenter,
+          child: Image.asset(
+            "assets/cars/chevy56.png",
+            fit: BoxFit.fitWidth,
+            width: screenIsLandscape(context) ? screenWidthOf(context) * .5 : screenWidthOf(context) * .8,
+          ),
+        ),
         Positioned(
           // alignment: Alignment.topCenter,
           top: 50,
 
           child: _buildAboutContent(context),
-        ),
-        Align(
-          alignment: screenIsLandscape(context) ? Alignment.bottomLeft : Alignment.bottomCenter,
-          child: Image.asset(
-            "assets/cars/chevy56.png",
-            fit: BoxFit.fitWidth,
-          ),
         ),
       ],
     );
@@ -57,6 +58,7 @@ class AboutPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            Spacer(),
             Text(
               "My name is Alejandro Zito, I have been a taxi driver in Cuba for almost 10 years. I am 28 years old and I enjoy doing the best in my job.",
               style: primaryTextThemeOf(context).headline,
@@ -65,7 +67,8 @@ class AboutPage extends StatelessWidget {
             Text(
               "You can reach me anytime at zitotaxi@gmail.com, or call us at +5350000000",
               style: primaryTextThemeOf(context).body1,
-            )
+            ),
+            Spacer(),
           ],
         ),
       ),

@@ -17,6 +17,7 @@ class ExploreSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: colorSchemeOf(context).primary,
       padding: EdgeInsets.symmetric(
         horizontal: (screenIsLandscape(context) ? 50 : 25),
         vertical: (screenIsLandscape(context) ? 25 : 15),
@@ -29,7 +30,7 @@ class ExploreSection extends StatelessWidget {
         children: <Widget>[
           Text(
             "Explore Cuba with us",
-            style: primaryTextThemeOf(context).title,
+            style: primaryTextThemeOf(context).title.apply(fontSizeFactor: .85),
           ),
           FutureBuilder(
             future: placesGetIconic(),

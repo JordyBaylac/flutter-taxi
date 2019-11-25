@@ -32,23 +32,21 @@ class RoutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           // title: Text("Zito Taxi in Cuba"),
           // centerTitle: true,
-          titleSpacing: 0,
-          title: TabBar(
-            tabs: [
-              Tab(
-                // icon: Icon(Icons.home),
-                child: Text("Home"),
-              ),
-              Tab(
-                // icon: Icon(Icons.live_help),
-                child: Text("About us"),
-              ),
-            ],
+          // titleSpacing: 0,
+          flexibleSpace: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TabBar(
+              tabs: [
+                Tab(child: Text("Home")),
+                Tab(child: Text("Price list")),
+                Tab(child: Text("About us")),
+              ],
+            ),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -60,6 +58,7 @@ class RoutPage extends StatelessWidget {
         body: TabBarView(
           children: [
             HomePage(),
+            AboutPage(),
             AboutPage(),
           ],
         ),
