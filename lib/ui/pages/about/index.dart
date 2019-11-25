@@ -13,9 +13,10 @@ class AboutPage extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.white,
-                Colors.white,
-                Colors.white,
+                colorSchemeOf(context).primary,
+                colorSchemeOf(context).primary,
+                colorSchemeOf(context).primary,
+                colorSchemeOf(context).primary,
                 colorSchemeOf(context).secondary,
               ],
               begin: Alignment.topCenter,

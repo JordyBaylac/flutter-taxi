@@ -17,7 +17,12 @@ class ExploreSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: colorSchemeOf(context).primary,
+      decoration: BoxDecoration(
+        color: colorSchemeOf(context).primary,
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(30),
+        ),
+      ),
       padding: EdgeInsets.symmetric(
         horizontal: (screenIsLandscape(context) ? 50 : 25),
         vertical: (screenIsLandscape(context) ? 25 : 15),

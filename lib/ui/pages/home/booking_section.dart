@@ -76,7 +76,7 @@ class _BookingSectionState extends State<BookingSection> {
                       child: _buildBookButton(),
                     ),
                     Text(
-                      "no payment required",
+                      "no payment is required",
                       style: Theme.of(context).primaryTextTheme.subtitle.apply(color: Colors.black.withOpacity(.7)),
                     ),
                   ],
@@ -216,7 +216,7 @@ class _BookingSectionState extends State<BookingSection> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Get Quote now!'),
+              Text('Continue'),
               SizedBox(width: 10),
               Icon(Icons.local_taxi),
             ],

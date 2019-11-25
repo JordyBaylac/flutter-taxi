@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 lightTheme() {
-  final primary = Colors.grey[200];
+  final primary = Colors.grey[100];
   final onPrimary = Colors.black;
   final primaryVariant = Colors.white;
 
@@ -35,6 +35,7 @@ lightTheme() {
   return ThemeData(
     primaryColor: primary,
     accentColor: secondary,
+    scaffoldBackgroundColor: primary,
 
     colorScheme: ColorScheme.light(
       primary: primary,
