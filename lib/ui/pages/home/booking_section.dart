@@ -98,7 +98,7 @@ class _BookingSectionState extends State<BookingSection> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  flex: 2,
+                  flex: 4,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
@@ -114,6 +114,7 @@ class _BookingSectionState extends State<BookingSection> {
                 ),
                 Spacer(),
                 Expanded(
+                  flex: 2,
                   child: DropdownButtonFormField(
                     items: ['1', '2', '3', '4', "5 to 9", "9 or more"].map((value) {
                       return DropdownMenuItem<String>(
