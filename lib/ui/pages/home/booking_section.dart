@@ -51,24 +51,13 @@ class _BookingSectionState extends State<BookingSection> {
               color: colorSchemeOf(context).primaryVariant,
               child: Column(
                 children: <Widget>[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("Book now!", style: Theme.of(context).primaryTextTheme.title),
-                          Spacer(),
-                          Text(
-                            "no payment required",
-                            style:
-                                Theme.of(context).primaryTextTheme.subtitle.apply(color: Colors.black.withOpacity(.7)),
-                          ),
-                          Spacer(flex: 2),
-                        ],
-                      ),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                    child: _buildBookButton(),
+                  ),
+                  Text(
+                    "no payment required",
+                    style: Theme.of(context).primaryTextTheme.subtitle.apply(color: Colors.black.withOpacity(.7)),
                   ),
                   Expanded(flex: 1, child: _buildBookingBody()),
                 ],
@@ -124,30 +113,16 @@ class _BookingSectionState extends State<BookingSection> {
                   Expanded(
                     flex: 3,
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: "Name"),
-                      validator: Validator(entityName: "Your name").add(RequiredRule()).add(MinLengthRule(4)),
+                      decoration: InputDecoration(labelText: "Origin"),
+                      validator: Validator(entityName: "Point of origin").add(RequiredRule()).add(MinLengthRule(4)),
                     ),
                   ),
                   Spacer(),
                   Expanded(
-                    flex: 2,
-                    child: DateTimeField(
-                      format: DateFormat("yyyy-MM-dd"),
-                      decoration: InputDecoration(labelText: "Date"),
-                      // initialValue: DateTime.now(),
-                      enableInteractiveSelection: false,
-                      keyboardType: TextInputType.datetime,
-                      onShowPicker: (context, currentValue) {
-                        return showDatePicker(
-                          context: context,
-                          firstDate: DateTime(1900),
-                          initialDate: currentValue ?? DateTime.now(),
-                          lastDate: DateTime(2100),
-                        );
-                      },
-                      onChanged: (date) {
-                        print("selected date $date");
-                      },
+                    flex: 3,
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: "Destination"),
+                      validator: Validator(entityName: "Desired destination").add(RequiredRule()).add(MinLengthRule(4)),
                     ),
                   ),
                 ],
@@ -195,16 +170,30 @@ class _BookingSectionState extends State<BookingSection> {
                   Expanded(
                     flex: 3,
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: "Origin"),
-                      validator: Validator(entityName: "Point of origin").add(RequiredRule()).add(MinLengthRule(4)),
+                      decoration: InputDecoration(labelText: "Name"),
+                      validator: Validator(entityName: "Your name").add(RequiredRule()).add(MinLengthRule(4)),
                     ),
                   ),
                   Spacer(),
                   Expanded(
-                    flex: 3,
-                    child: TextFormField(
-                      decoration: InputDecoration(labelText: "Destination"),
-                      validator: Validator(entityName: "Desired destination").add(RequiredRule()).add(MinLengthRule(4)),
+                    flex: 2,
+                    child: DateTimeField(
+                      format: DateFormat("yyyy-MM-dd"),
+                      decoration: InputDecoration(labelText: "Date"),
+                      // initialValue: DateTime.now(),
+                      enableInteractiveSelection: false,
+                      keyboardType: TextInputType.datetime,
+                      onShowPicker: (context, currentValue) {
+                        return showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                      },
+                      onChanged: (date) {
+                        print("selected date $date");
+                      },
                     ),
                   ),
                 ],
@@ -212,47 +201,34 @@ class _BookingSectionState extends State<BookingSection> {
               SizedBox(
                 height: 15,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: (screenIsLandscape(context) ? 10 : 5)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Spacer(),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      color: colorSchemeOf(context).secondary,
-                      onPressed: () {
-                        // Validate returns true if the form is valid, or false
-                        // otherwise.
-                        if (_formKey.currentState.validate()) {
-                          // If the form is valid, display a Snackbar.
-                          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));
-                        }
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: (screenIsLandscape(context) ? 15 : 10)),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Get Quote'),
-                            SizedBox(width: 10),
-                            Icon(Icons.local_taxi),
-                          ],
-                        ),
-                      ),
-                    ),
-                    !screenIsLandscape(context)
-                        ? Spacer()
-                        : SizedBox(
-                            width: 0,
-                          ),
-                  ],
-                ),
-              ),
               SizedBox(
                 height: 200,
               ),
+            ],
+          ),
+        ),
+      );
+
+  _buildBookButton() => RaisedButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        color: colorSchemeOf(context).secondary,
+        onPressed: () {
+          // Validate returns true if the form is valid, or false
+          // otherwise.
+          if (_formKey.currentState.validate()) {
+            // If the form is valid, display a Snackbar.
+            Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: (screenIsLandscape(context) ? 15 : 10)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Get Quote now!'),
+              SizedBox(width: 10),
+              Icon(Icons.local_taxi),
             ],
           ),
         ),

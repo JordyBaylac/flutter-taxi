@@ -46,7 +46,7 @@ class RoutPage extends StatelessWidget {
               ),
               Tab(
                 // icon: Icon(Icons.live_help),
-                child: Text("Contact us"),
+                child: Text("About us"),
               ),
             ],
           ),

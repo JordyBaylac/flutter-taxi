@@ -37,7 +37,7 @@ class ExploreSection extends StatelessWidget {
               if (snapshot.hasError) {
                 return Container();
               } else if (!snapshot.hasData) {
-                return Center(child: Text("no data"));
+                return Container();
               }
 
               final places = snapshot.data as List<Place>;
@@ -58,11 +58,6 @@ class ExploreSection extends StatelessWidget {
               );
             },
           ),
-          // Row(
-          //   children: <Widget>[
-          //     _buildCard(context),
-          //   ],
-          // )
         ],
       ),
     );
